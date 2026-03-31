@@ -21,7 +21,7 @@ Each skill hands off to the next via a shared tracker file. You stay in control 
 ## The three skills
 
 ### 🔍 Search (`jobautopilot/search`)
-Searches LinkedIn, Indeed, Glassdoor, ZipRecruiter, Google Jobs, and company career pages. Can also find hiring managers via email, LinkedIn, Twitter/X, and other social networks. Filters by role, location, salary, and recency, then writes results to a tracker.
+Reads your resume pool to build a candidate profile — your skills, past titles, and target industries. Then searches LinkedIn, Indeed, Glassdoor, ZipRecruiter, Google Jobs, and company career pages for matching roles. No keyword config needed. Filters by role, location, salary, and recency, then writes results to a tracker.
 
 ### 📄 Tailor (`jobautopilot/tailor`)
 Reads each shortlisted job, fetches the full job description, and rewrites your resume bullet points to match. Produces a tailored `.docx` resume and cover letter for each role — using only your real experience, nothing made up.
@@ -64,9 +64,16 @@ To change your pool location after setup, edit `~/.openclaw/users/<you>/config.s
 ### 1. Install
 
 ```bash
-clawhub install jobautopilot/search
-clawhub install jobautopilot/tailor
-clawhub install jobautopilot/submit
+clawhub install jerronl/jobautopilot-bundle
+bash skills/jobautopilot-bundle/install.sh
+```
+
+This installs all three skills at once. Or install them individually if you only need part of the pipeline:
+
+```bash
+clawhub install jerronl/jobautopilot-search
+clawhub install jerronl/jobautopilot-tailor
+clawhub install jerronl/jobautopilot-submitter
 ```
 
 ### 2. Set up

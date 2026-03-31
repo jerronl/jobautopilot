@@ -1,8 +1,8 @@
 ---
-name: jobautopilot/tailor
+name: jobautopilot-tailor
 description: Tailors your resume and cover letter to a specific job description. Fetches the JD, rewrites bullet points to match keywords, and exports polished .docx files — 100% based on your real experience, nothing invented. Picks up shortlisted jobs from jobautopilot/search and hands resume_ready entries to jobautopilot/submit.
 author: jerronl
-version: "1.0.0"
+version: "1.0.1"
 homepage: https://github.com/jerronl/jobautopilot
 funding: https://paypal.me/ZLiu308
 tags:
@@ -21,6 +21,16 @@ metadata:
   clawdbot:
     emoji: "📄"
     requires:
+      env:
+        - RESUME_DIR
+        - RESUME_OUTPUT_DIR
+        - RESUME_TEMPLATE
+        - MD_TO_DOCX_SCRIPT
+        - JOB_SEARCH_TRACKER
+        - USER_FULL_NAME
+        - USER_EMAIL
+        - USER_PHONE
+        - USER_LINKEDIN
       bins:
         - python3
       pip:

@@ -1,8 +1,8 @@
 ---
-name: jobautopilot/search
-description: Searches for jobs across LinkedIn, Indeed, Glassdoor, ZipRecruiter, Google Jobs, and any company career page. Also finds hiring managers via email, LinkedIn, Twitter/X, and other social networks. Filters results by role, location, salary, and recency, then writes a structured tracker. Part of the Job Autopilot end-to-end pipeline — hand off shortlisted jobs to jobautopilot/tailor.
+name: jobautopilot-search
+description: Reads your resume pool to build a candidate profile, then searches LinkedIn, Indeed, Glassdoor, ZipRecruiter, Google Jobs, and company career pages for matching roles. Filters by role, location, salary, and recency. On request, finds hiring managers via LinkedIn, Twitter/X, or email. Writes results to a structured tracker. Requires a browser tool (profile: search) and local config via environment variables. Part of the Job Autopilot pipeline.
 author: jerronl
-version: "1.0.0"
+version: "1.0.1"
 homepage: https://github.com/jerronl/jobautopilot
 funding: https://paypal.me/ZLiu308
 tags:
@@ -18,8 +18,16 @@ metadata:
   clawdbot:
     emoji: "🔍"
     requires:
+      env:
+        - JOB_SEARCH_KEYWORDS
+        - JOB_SEARCH_LOCATION
+        - JOB_SEARCH_TRACKER
+        - JOB_SEARCH_HANDOFF
+        - RESUME_DIR
       bins: []
     files: []
+    browser: true
+    browser_profile: search
 ---
 
 # Job Hunt — Search Agent
@@ -117,6 +125,16 @@ After each search session, update `$JOB_SEARCH_HANDOFF` with:
 - Any platforms or companies worth revisiting
 - Anything unusual encountered
 
+## Optional: Find hiring managers
+
+If the user explicitly asks (e.g. "find the hiring manager", "who should I contact at X", "find their email"), use the browser tool to look up the relevant person via:
+
+- **LinkedIn** — search `site:linkedin.com/in "<company>" recruiter OR "talent acquisition" OR "engineering manager"`
+- **Twitter/X** — search for the company's tech leads or recruiters by handle or bio keyword
+- **Email** — look for patterns on the company's site (e.g. careers page footer, team page) or use tools like Hunter.io if available
+
+Record any found contacts in the tracker's Notes column. This step is **only performed on explicit user request** — do not run it by default.
+
 ## Scope
 
-This skill covers **search and screening only**. Do not tailor resumes, write cover letters, or submit applications. Hand off `shortlist` entries to the `jobautopilot-tailor` skill.
+This skill covers **search, screening, and optional hiring manager outreach**. Do not tailor resumes, write cover letters, or submit applications. Hand off `shortlist` entries to the `jobautopilot-tailor` skill.

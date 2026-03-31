@@ -1,8 +1,8 @@
 ---
-name: jobautopilot/submit
+name: jobautopilot-submitter
 description: Automatically fills and submits job applications. Opens the application page, fills multi-step forms (work history, education, EEOC, dropdowns), uploads your tailored resume and cover letter, and confirms successful submission. Picks up resume_ready jobs from jobautopilot/tailor and marks them applied in the tracker.
 author: jerronl
-version: "1.0.0"
+version: "1.0.1"
 homepage: https://github.com/jerronl/jobautopilot
 funding: https://paypal.me/ZLiu308
 tags:
@@ -21,6 +21,17 @@ metadata:
   clawdbot:
     emoji: "🚀"
     requires:
+      env:
+        - OPENCLAW_USER
+        - OPENCLAW_PROFILE
+        - USER_FIRST_NAME
+        - USER_LAST_NAME
+        - USER_EMAIL
+        - USER_PHONE
+        - USER_LINKEDIN
+        - RESUME_DIR
+        - TRACKER_PATH
+        - CHECK_FIELDS_JS
       bins:
         - python3
       pip:
@@ -29,6 +40,8 @@ metadata:
       - scripts/check_required_fields.js
       - scripts/fill_template.sh
       - scripts/match_variant_options.sh
+    browser: true
+    browser_profile: apply
 ---
 
 # Job Hunt — Submitter
