@@ -27,49 +27,6 @@ read -rp "Email:      " USER_EMAIL
 read -rp "Phone (e.g. +1-212-555-0000): " USER_PHONE
 read -rp "LinkedIn URL: " USER_LINKEDIN
 echo ""
-echo "--- Password prefix for new job site registrations ---"
-echo ""
-echo "When the agent registers a new account on a job site, it will use:"
-echo "   <your prefix>..<SiteName>   (e.g. MyP@ss1..Workday)"
-echo ""
-echo "Requirements for the prefix:"
-echo "  • At least 6 characters"
-echo "  • Must include uppercase, lowercase, a number, and a special character"
-echo "  • Example: MyP@ss1  or  Secure#9"
-echo "  • Do NOT use any of your real passwords"
-echo ""
-while true; do
-  read -rsp "Password prefix (input hidden): " USER_PASSWORD_PREFIX
-  echo ""
-  if [ -z "$USER_PASSWORD_PREFIX" ]; then
-    echo "⚠️  Skipped — you will need to fill passwords manually during submission."
-    break
-  fi
-  # Validate: length, uppercase, lowercase, digit, special char
-  if [ ${#USER_PASSWORD_PREFIX} -lt 6 ]; then
-    echo "❌  Too short — must be at least 6 characters. Try again."
-    continue
-  fi
-  if ! echo "$USER_PASSWORD_PREFIX" | grep -q "[A-Z]"; then
-    echo "❌  Missing uppercase letter. Try again."
-    continue
-  fi
-  if ! echo "$USER_PASSWORD_PREFIX" | grep -q "[a-z]"; then
-    echo "❌  Missing lowercase letter. Try again."
-    continue
-  fi
-  if ! echo "$USER_PASSWORD_PREFIX" | grep -q "[0-9]"; then
-    echo "❌  Missing number. Try again."
-    continue
-  fi
-  if ! echo "$USER_PASSWORD_PREFIX" | grep -qP "[^a-zA-Z0-9]"; then
-    echo "❌  Missing special character (e.g. @, #, !, $). Try again."
-    continue
-  fi
-  echo "✅  Password prefix accepted."
-  break
-done
-echo ""
 read -rp "Resume folder (where your original .docx resumes live) [~/Documents/jobs/]: " RESUME_DIR
 RESUME_DIR="${RESUME_DIR:-$HOME/Documents/jobs/}"
 read -rp "Tailored output folder [~/Documents/jobs/tailored/]: " RESUME_OUTPUT_DIR
@@ -122,7 +79,6 @@ export USER_LAST_NAME="${USER_LAST_NAME}"
 export USER_EMAIL="${USER_EMAIL}"
 export USER_PHONE="${USER_PHONE}"
 export USER_LINKEDIN="${USER_LINKEDIN}"
-export USER_PASSWORD_PREFIX="${USER_PASSWORD_PREFIX}"
 
 # File paths
 export RESUME_DIR="${RESUME_DIR}"

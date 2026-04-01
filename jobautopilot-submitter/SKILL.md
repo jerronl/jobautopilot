@@ -2,7 +2,7 @@
 name: jobautopilot-submitter
 description: Automatically fills and submits job applications. Opens the application page, fills multi-step forms (work history, education, EEOC, dropdowns), uploads your tailored resume and cover letter, and confirms successful submission. Picks up resume_ready jobs from jobautopilot/tailor and marks them applied in the tracker.
 author: jerronl
-version: "1.0.1"
+version: "1.1.0"
 homepage: https://github.com/jerronl/jobautopilot
 funding: https://paypal.me/ZLiu308
 tags:
@@ -17,6 +17,23 @@ requires:
     - exec
   python_packages:
     - python-docx
+requires:
+  browser: true
+  browser_profile: apply
+  env:
+    - OPENCLAW_USER
+    - OPENCLAW_PROFILE
+    - USER_FIRST_NAME
+    - USER_LAST_NAME
+    - USER_EMAIL
+    - USER_PHONE
+    - USER_LINKEDIN
+    - RESUME_DIR
+    - TRACKER_PATH
+    - CHECK_FIELDS_JS
+    - USER_PASSWORD_PREFIX
+  bins:
+    - python3
 metadata:
   clawdbot:
     emoji: "🚀"
@@ -32,6 +49,7 @@ metadata:
         - RESUME_DIR
         - TRACKER_PATH
         - CHECK_FIELDS_JS
+        - USER_PASSWORD_PREFIX
       bins:
         - python3
       pip:
@@ -47,6 +65,15 @@ metadata:
 # Job Hunt — Submitter
 
 Automates form-filling and submission for `resume_ready` jobs. Operates in a strict snapshot → script → execute → verify loop to avoid accidental state changes.
+
+## Script installation note
+
+The helper scripts (`check_required_fields.js`, `fill_template.sh`, `match_variant_options.sh`) are included in this skill's `scripts/` folder. Running `setup.sh` (from `jobautopilot-bundle`) copies them to `~/.openclaw/workspace/job_sub_agent/scripts/` and sets `CHECK_FIELDS_JS` to point there. If you install this skill standalone without the bundle, run:
+
+```bash
+mkdir -p ~/.openclaw/workspace/job_sub_agent/scripts/
+cp scripts/* ~/.openclaw/workspace/job_sub_agent/scripts/
+```
 
 ## Setup
 
@@ -74,7 +101,7 @@ export USER_WORK_AUTH="Yes"
 export USER_NEED_SPONSOR="No"
 ```
 
-Password format for new site registrations: `Job_8..<CompanyName>`
+Password for new site registrations: read `$USER_PASSWORD_PREFIX` from config, then append a site-specific suffix (e.g. `${USER_PASSWORD_PREFIX}..Workday`). The prefix is set by the user during `setup.sh` and never stored in SKILL.md.
 
 ## Session start checklist
 
@@ -131,7 +158,7 @@ Check top-right for existing session. If not logged in:
 3. Generate fill script with `fill --fields '[{"ref":"...","value":"..."}]'`
 4. Execute script
 
-If email already registered: try `Job_8..<CompanyName>` password first, then reset flow.
+If email already registered: try `${USER_PASSWORD_PREFIX}..<SiteName>` first, then use the reset flow.
 
 ### 5. Main form loop
 

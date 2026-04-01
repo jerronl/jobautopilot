@@ -140,7 +140,9 @@ Keep this file next to your config. It's your cheat sheet — add anything envir
 ## Requirements
 
 - OpenClaw >= 2026.2.0
-- Browser tool enabled (`search` profile for the Search agent, `apply` profile for the Submit agent)
+- Browser tool enabled — `setup.sh` creates the two required profiles automatically:
+  - `search` profile for the Search agent
+  - `apply` profile for the Submit agent
 - `pip install python-docx`
 
 ---

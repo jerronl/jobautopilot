@@ -1,8 +1,8 @@
 ---
 name: jobautopilot-tailor
-description: Tailors your resume and cover letter to a specific job description. Fetches the JD, rewrites bullet points to match keywords, and exports polished .docx files — 100% based on your real experience, nothing invented. Picks up shortlisted jobs from jobautopilot/search and hands resume_ready entries to jobautopilot/submit.
+description: Tailors your resume and cover letter to a specific job description. Fetches the JD, rewrites bullet points to match keywords, and exports polished .docx files — 100% based on your real experience, nothing invented. Picks up shortlisted jobs from jobautopilot-search and hands resume_ready entries to jobautopilot-submitter.
 author: jerronl
-version: "1.0.1"
+version: "1.1.0"
 homepage: https://github.com/jerronl/jobautopilot
 funding: https://paypal.me/ZLiu308
 tags:
@@ -17,6 +17,20 @@ requires:
     - browser
   python_packages:
     - python-docx
+    - lxml
+requires:
+  env:
+    - RESUME_DIR
+    - RESUME_OUTPUT_DIR
+    - RESUME_TEMPLATE
+    - MD_TO_DOCX_SCRIPT
+    - JOB_SEARCH_TRACKER
+    - USER_FULL_NAME
+    - USER_EMAIL
+    - USER_PHONE
+    - USER_LINKEDIN
+  bins:
+    - python3
 metadata:
   clawdbot:
     emoji: "📄"
@@ -35,6 +49,7 @@ metadata:
         - python3
       pip:
         - python-docx
+        - lxml
     files:
       - scripts/md_to_docx.py
 ---
@@ -93,7 +108,7 @@ Read all files in `$RESUME_DIR`. The pool may contain:
 
 | File type | What to extract |
 |-----------|----------------|
-| Master resume (`.docx` / `.pdf`) | Full work history, bullet points, metrics, dates |
+| Master resume (`.docx` / `.pdf`) | Full work history, bullet points, metrics, dates. PDF text is extracted by the agent's built-in tools; the conversion script handles `.docx` and `.md` only. |
 | Older tailored versions | Phrasing that worked well for similar roles |
 | Cover letter drafts | Preferred voice, opening formulas, recurring themes |
 | Skills list / bio (`.md` / `.txt`) | Certifications, tools, side projects, publications |

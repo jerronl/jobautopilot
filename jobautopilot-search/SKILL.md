@@ -2,7 +2,7 @@
 name: jobautopilot-search
 description: Reads your resume pool to build a candidate profile, then searches LinkedIn, Indeed, Glassdoor, ZipRecruiter, Google Jobs, and company career pages for matching roles. Filters by role, location, salary, and recency. On request, finds hiring managers via LinkedIn, Twitter/X, or email. Writes results to a structured tracker. Requires a browser tool (profile: search) and local config via environment variables. Part of the Job Autopilot pipeline.
 author: jerronl
-version: "1.0.1"
+version: "1.1.0"
 homepage: https://github.com/jerronl/jobautopilot
 funding: https://paypal.me/ZLiu308
 tags:
@@ -14,6 +14,12 @@ tags:
 requires:
   browser: true
   browser_profile: search
+  env:
+    - JOB_SEARCH_KEYWORDS
+    - JOB_SEARCH_LOCATION
+    - JOB_SEARCH_TRACKER
+    - JOB_SEARCH_HANDOFF
+    - RESUME_DIR
 metadata:
   clawdbot:
     emoji: "🔍"
