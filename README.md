@@ -9,7 +9,7 @@ Instead of spending hours searching, rewriting your resume, and filling out form
 ## How it works
 
 ```
-jobautopilot/search  ──►  jobautopilot/tailor  ──►  jobautopilot/submit
+jobautopilot-search  ──►  jobautopilot-tailor  ──►  jobautopilot-submitter
    Find jobs               Tailor your resume          Fill & submit forms
    Filter & track          Write cover letter          Verify & confirm
 ```
@@ -20,13 +20,13 @@ Each skill hands off to the next via a shared tracker file. You stay in control 
 
 ## The three skills
 
-### 🔍 Search (`jobautopilot/search`)
+### 🔍 Search (`jobautopilot-search`)
 Reads your resume pool to build a candidate profile — your skills, past titles, and target industries. Then searches LinkedIn, Indeed, Glassdoor, ZipRecruiter, Google Jobs, and company career pages for matching roles. No keyword config needed. Filters by role, location, salary, and recency, then writes results to a tracker.
 
-### 📄 Tailor (`jobautopilot/tailor`)
+### 📄 Tailor (`jobautopilot-tailor`)
 Reads each shortlisted job, fetches the full job description, and rewrites your resume bullet points to match. Produces a tailored `.docx` resume and cover letter for each role — using only your real experience, nothing made up.
 
-### 🚀 Submit (`jobautopilot/submit`)
+### 🚀 Submitter (`jobautopilot-submitter`)
 Opens the application page, fills out multi-step forms (work history, education, EEOC, dropdowns), uploads your tailored resume and cover letter, and confirms the submission went through. Builds a platform knowledge base so it gets smarter with each application.
 
 ---
@@ -64,27 +64,19 @@ To change your pool location after setup, edit `~/.openclaw/users/<you>/config.s
 ### 1. Install
 
 ```bash
-clawhub install jerronl/jobautopilot-bundle
-bash skills/jobautopilot-bundle/install.sh
+openclaw skills install jobautopilot-bundle
+openclaw skills install jobautopilot-search
+openclaw skills install jobautopilot-tailor
+openclaw skills install jobautopilot-submitter
 ```
 
-This installs all three skills at once. Or install them individually if you only need part of the pipeline:
+Verify all four skills are loaded:
 
 ```bash
-clawhub install jerronl/jobautopilot-search
-clawhub install jerronl/jobautopilot-tailor
-clawhub install jerronl/jobautopilot-submitter
+openclaw skills check | grep jobautopilot
 ```
 
-### 2. Set up
-
-```bash
-bash setup.sh
-```
-
-Setup asks for your name, email, phone, LinkedIn, resume folder, job search preferences, and EEOC defaults. It writes your config, copies scripts, and creates the workspace. Takes about 2 minutes.
-
-### 3. Run
+### 2. Run
 
 Just tell OpenClaw what you want:
 
@@ -120,9 +112,9 @@ After setup, create a `TOOLS.md` file in your OpenClaw workspace to record your 
 
 ### Resume tools
 
-- **md_to_docx.py** (at `~/.openclaw/workspace/resumes/`)
+- **md_to_docx.py** (at `~/.openclaw/workspace/job_sub_agent/scripts/`)
   - Usage: `python3 md_to_docx.py <resume.md> <template.docx> <output.docx>`
-  - Template: `~/.openclaw/workspace/resumes/sample_placeholders.docx`
+  - Template: `~/.openclaw/workspace/job_sub_agent/scripts/sample_placeholders.docx`
 
 - **Cover letter tool**
   - Uses python-docx directly, no template needed
@@ -131,7 +123,7 @@ After setup, create a `TOOLS.md` file in your OpenClaw workspace to record your 
 ### Paths
 
 - Resume pool:    /path/to/your/Documents/jobs/
-- Output folder:  ~/.openclaw/workspace/resumes/
+- Output folder:  ~/Documents/jobs/tailored/
 - Tracker:        ~/.openclaw/workspace/job_search/job_application_tracker.md
 ```
 
@@ -142,7 +134,7 @@ Keep this file next to your config. It's your cheat sheet — add anything envir
 - OpenClaw >= 2026.2.0
 - Browser tool enabled — `setup.sh` creates the two required profiles automatically:
   - `search` profile for the Search agent
-  - `apply` profile for the Submit agent
+  - `apply` profile for the Submitter agent
 - `pip install python-docx`
 
 ---

@@ -2,9 +2,8 @@
 name: jobautopilot-tailor
 description: Tailors your resume and cover letter to a specific job description. Fetches the JD, rewrites bullet points to match keywords, and exports polished .docx files — 100% based on your real experience, nothing invented. Picks up shortlisted jobs from jobautopilot-search and hands resume_ready entries to jobautopilot-submitter.
 author: jerronl
-version: "1.1.0"
+version: "1.3.2"
 homepage: https://github.com/jerronl/jobautopilot
-funding: https://paypal.me/ZLiu308
 tags:
   - resume
   - cover-letter
@@ -18,14 +17,14 @@ requires:
   python_packages:
     - python-docx
     - lxml
-requires:
   env:
     - RESUME_DIR
     - RESUME_OUTPUT_DIR
     - RESUME_TEMPLATE
     - MD_TO_DOCX_SCRIPT
     - JOB_SEARCH_TRACKER
-    - USER_FULL_NAME
+    - USER_FIRST_NAME
+    - USER_LAST_NAME
     - USER_EMAIL
     - USER_PHONE
     - USER_LINKEDIN
@@ -41,7 +40,8 @@ metadata:
         - RESUME_TEMPLATE
         - MD_TO_DOCX_SCRIPT
         - JOB_SEARCH_TRACKER
-        - USER_FULL_NAME
+        - USER_FIRST_NAME
+        - USER_LAST_NAME
         - USER_EMAIL
         - USER_PHONE
         - USER_LINKEDIN
@@ -54,7 +54,7 @@ metadata:
       - scripts/md_to_docx.py
 ---
 
-# Job Hunt — Resume Tailor
+# Job Autopilot — Resume Tailor
 
 Produces a tailored resume and cover letter for each `shortlist` job in the tracker. Delivers `.docx` files ready to attach and send.
 
@@ -73,11 +73,12 @@ Add to `~/.openclaw/workspace/job_search/config.sh`:
 ```bash
 export RESUME_DIR="$HOME/Documents/jobs/"           # your original resume files live here
 export RESUME_OUTPUT_DIR="$HOME/Documents/jobs/tailored/"  # where tailored files are saved
-export RESUME_TEMPLATE="$HOME/.openclaw/workspace/job_search/sample_placeholders.docx"
+export RESUME_TEMPLATE="$HOME/.openclaw/workspace/job_sub_agent/scripts/sample_placeholders.docx"
 # Download template: https://github.com/jerronl/jobautopilot/raw/main/jobautopilot-tailor/scripts/sample_placeholders.docx
-export MD_TO_DOCX_SCRIPT="$HOME/.openclaw/workspace/job_search/md_to_docx.py"
+export MD_TO_DOCX_SCRIPT="$HOME/.openclaw/workspace/job_sub_agent/scripts/md_to_docx.py"
 export JOB_SEARCH_TRACKER="$HOME/.openclaw/workspace/job_search/job_application_tracker.md"
-export USER_FULL_NAME="Your Name"
+export USER_FIRST_NAME="Your"
+export USER_LAST_NAME="Name"
 export USER_EMAIL="your@email.com"
 export USER_PHONE="+1-555-000-0000"
 export USER_LINKEDIN="https://linkedin.com/in/yourprofile"
@@ -279,3 +280,7 @@ shortlist → md_ready → resume_ready
 ## Scope
 
 Resume tailoring only. Do not submit applications. Hand off `resume_ready` entries to the `jobautopilot-submitter` skill.
+
+## Support
+
+If Job Autopilot saved you time: paypal.me/ZLiu308

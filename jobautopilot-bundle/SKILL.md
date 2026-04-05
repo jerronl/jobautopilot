@@ -1,10 +1,9 @@
 ---
 name: jobautopilot-bundle
-description: Installs the full Job Autopilot pipeline — search jobs, tailor resumes, and submit applications. Convenience bundle that installs jobautopilot-search, jobautopilot-tailor, and jobautopilot-submitter in one place.
+description: Installs the full Job Autopilot pipeline — search jobs, tailor resumes, and submit applications. Convenience bundle that installs jobautopilot-search, jobautopilot-tailor, and jobautopilot-submitter in one step.
 author: jerronl
-version: "1.1.0"
+version: "1.3.3"
 homepage: https://github.com/jerronl/jobautopilot
-funding: https://paypal.me/ZLiu308
 tags:
   - job-search
   - resume
@@ -14,9 +13,11 @@ metadata:
   clawdbot:
     emoji: "🤖"
     requires:
-      bins: []
+      bins:
+        - python3
     files:
       - install.sh
+      - setup.sh
 ---
 
 # Job Autopilot — Full Bundle
@@ -24,28 +25,34 @@ metadata:
 Install all three Job Autopilot skills and run the full end-to-end pipeline:
 **search → tailor → submit**.
 
+## What this skill does
+
+This is a **bundle installer only**. It contains two scripts:
+
+- `install.sh` — runs `openclaw skills install` for each of the three sub-skills
+- `setup.sh` — prompts for your personal info and writes a local config file
+
+Neither script makes outbound network requests beyond `openclaw skills install`. No data is collected or sent to any server by these scripts. Note: the sub-skills (especially the submitter) use browser automation to navigate job sites — that browser activity does involve network traffic to those sites, initiated only when you explicitly request it.
+
 ## Install all three skills
 
 ```bash
-clawhub install jobautopilot-search
-clawhub install jobautopilot-tailor
-clawhub install jobautopilot-submitter
+openclaw skills install jobautopilot-bundle
+openclaw skills install jobautopilot-search
+openclaw skills install jobautopilot-tailor
+openclaw skills install jobautopilot-submitter
 ```
 
-## Then run setup
-
-`setup.sh` is included in the `jobautopilot-bundle` skill folder after install:
+Verify all four are loaded:
 
 ```bash
-bash skills/jobautopilot-bundle/setup.sh
+openclaw skills check | grep jobautopilot
 ```
-
-Setup takes about 2 minutes — it asks for your name, email, resume folder location, and job search preferences, then writes your config and copies scripts.
 
 ## How it works
 
 ```
-jobautopilot/search  ──►  jobautopilot/tailor  ──►  jobautopilot-submitter
+jobautopilot-search  ──►  jobautopilot-tailor  ──►  jobautopilot-submitter
    Find jobs               Tailor resume              Fill & submit forms
    Filter & track          Write cover letter         Verify & confirm
 ```
@@ -60,16 +67,25 @@ Just tell OpenClaw what you want:
 
 ## Privacy & data storage
 
-Setup collects the following personal information and stores it **locally only**:
+Setup collects personal information and stores it **locally only**:
 
 | Data | Stored at |
 |------|-----------|
 | Name, email, phone, LinkedIn | `~/.openclaw/users/<you>/config.sh` |
 | Resume files | Your existing folder (you choose during setup) |
-| Tailored resumes & cover letters | `~/.openclaw/workspace/resumes/` |
+| Tailored resumes & cover letters | `~/Documents/jobs/tailored/` (default, set during setup) |
 | Job tracker | `~/.openclaw/workspace/job_search/job_application_tracker.md` |
 
-No data is sent to any third party. Browser automation uses two isolated profiles (`search` and `apply`) created locally. Credentials for job sites are stored only in your browser profile cookies — never in config files.
+No data is sent to any third party. Browser automation uses two isolated profiles (`search` and `apply`) created locally. **No passwords are stored by this skill.** Login to job sites uses browser-saved credentials or manual entry — the skill never reads or stores any password.
+
+## Security
+
+- **No outbound network calls from scripts**: `install.sh` and `setup.sh` operate locally only. The only network operations are `openclaw skills install` (downloading these skills) and browser navigation you explicitly request.
+- **No password handling**: This skill does not read, store, or transmit any passwords. Login flows rely on your browser's own credential store.
+- **Browser profiles**: Setup instructs you to manually create two isolated profiles (`search`, `apply`) using `openclaw browser profile create`. No browser profiles are created automatically by any script. You can inspect or delete them at any time.
+- **Personal data**: Written only to `~/.openclaw/users/<you>/config.sh`. Setup automatically restricts this file to owner-only access (`chmod 600`). Read `setup.sh` in full before running to verify this.
+- **Helper scripts**: All scripts in `scripts/` are plain shell, Python, and JavaScript with no obfuscation, no encoded payloads, no remote fetches at runtime.
+- **EEOC fields**: Standard fields required by US job application forms (Equal Employment Opportunity Commission). Values are stored locally in your config and supplied only to forms you explicitly instruct the agent to fill. They are never logged or transmitted elsewhere.
 
 ## Requirements
 
@@ -79,6 +95,5 @@ No data is sent to any third party. Browser automation uses two isolated profile
 
 ## Support
 
-[![PayPal](https://github.com/jerronl/jobautopilot/raw/main/qr-paypal.png)](https://paypal.me/ZLiu308)
-
-[paypal.me/ZLiu308](https://paypal.me/ZLiu308)
+If Job Autopilot saved you time, a coffee is appreciated:
+paypal.me/ZLiu308
